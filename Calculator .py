@@ -45,7 +45,10 @@ def press_op_btn(op):
         calc_num1 = calc_num1 + math_op + calc_num2
         op_order = True
     elif math_op != '' and calc_num2 != '' and not equals_prior:
-        calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
+        try:
+            calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
+        except ZeroDivisionError:
+            calc_num1 = 'Error'
         num_display.config(text=calc_num1)
         calc_num2 = ''
 
@@ -106,7 +109,10 @@ def press_equals():
     global calc_num1_display
 
     if calc_num1 != '' and calc_num2 != '' and math_op != '':
-        calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
+        try:
+            calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
+        except ZeroDivisionError:
+            calc_num1 = 'Error'
         num_display.config(text=calc_num1)
         calc_num1_display = True
     equals_prior = True
