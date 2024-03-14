@@ -4,77 +4,95 @@ calc_num1 = '0'
 calc_num2 = ''
 math_op = ''
 equals_prior = False
+calc_num1_display = True
+op_order = False
 
 
 def press_num_btn(num):
     global calc_num1
     global calc_num2
     global math_op
-    if math_op == '':
-        if calc_num1 == '0':
+    global calc_num1_display
+    global equals_prior
+    global op_order
+
+    if calc_num1_display:
+        if calc_num1 == '0' or equals_prior:
             calc_num1 = num
             num_display.config(text=calc_num1)
         else:
             calc_num1 = calc_num1 + num
             num_display.config(text=calc_num1)
     else:
-        if calc_num2 == '0':
+        if calc_num2 == '0' or op_order:
             calc_num2 = num
             num_display.config(text=calc_num2)
+            op_order = False
         else:
             calc_num2 = calc_num2 + num
             num_display.config(text=calc_num2)
     erase_button.config(text='C')
 
 def press_op_btn(op):
+    global calc_num1_display
     global calc_num1
     global calc_num2
     global math_op
     global equals_prior
-    if math_op != '' and calc_num2 != '' and not equals_prior:
+    global op_order
+    
+    if (op == '*'or op == '/') and (math_op == '+' or math_op == '-'):
+        calc_num1 = calc_num1 + math_op + calc_num2
+        op_order = True
+    elif math_op != '' and calc_num2 != '' and not equals_prior:
         calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
         num_display.config(text=calc_num1)
-    calc_num2 = ''
+        calc_num2 = ''
+
+    if equals_prior:
+        calc_num2 = ''
     math_op = op
     equals_prior = False
+    calc_num1_display = False
     toggle_button()
 
 def toggle_button():
     if math_op == '/':
-        divide_button.config(fg='#FF9912', bg='white', state=DISABLED)
-        multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        minus_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        plus_button.config(fg='white', bg='#FF9912', state=NORMAL)
+        divide_button.config(fg='#FF9912', bg='white')
+        multiply_button.config(fg='white', bg='#FF9912')
+        minus_button.config(fg='white', bg='#FF9912')
+        plus_button.config(fg='white', bg='#FF9912')
     elif math_op == '*':
-        divide_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        multiply_button.config(fg='#FF9912', bg='white', state=DISABLED)
-        minus_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        plus_button.config(fg='white', bg='#FF9912', state=NORMAL)
+        divide_button.config(fg='white', bg='#FF9912')
+        multiply_button.config(fg='#FF9912', bg='white')
+        minus_button.config(fg='white', bg='#FF9912')
+        plus_button.config(fg='white', bg='#FF9912')
     elif math_op == '-':
-        divide_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        minus_button.config(fg='#FF9912', bg='white', state=DISABLED)
-        plus_button.config(fg='white', bg='#FF9912', state=NORMAL)
+        divide_button.config(fg='white', bg='#FF9912')
+        multiply_button.config(fg='white', bg='#FF9912')
+        minus_button.config(fg='#FF9912', bg='white')
+        plus_button.config(fg='white', bg='#FF9912')
     elif math_op == '+':
-        divide_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        minus_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        plus_button.config(fg='#FF9912', bg='white', state=DISABLED)
+        divide_button.config(fg='white', bg='#FF9912')
+        multiply_button.config(fg='white', bg='#FF9912')
+        minus_button.config(fg='white', bg='#FF9912')
+        plus_button.config(fg='#FF9912', bg='white')
     else:
-        divide_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        minus_button.config(fg='white', bg='#FF9912', state=NORMAL)
-        plus_button.config(fg='white', bg='#FF9912', state=NORMAL)
+        divide_button.config(fg='white', bg='#FF9912')
+        multiply_button.config(fg='white', bg='#FF9912')
+        minus_button.config(fg='white', bg='#FF9912')
+        plus_button.config(fg='white', bg='#FF9912')
 
 
 def press_comma():
     global calc_num1
     global calc_num2
     global math_op
-    if num_display['text'] == calc_num1 and '.' not in calc_num1:
+
+    if calc_num1_display and '.' not in calc_num1:
         calc_num1 = calc_num1 + '.'
         num_display.config(text=calc_num1)
-    elif num_display['text'] == calc_num2 and '.' not in calc_num2:
+    elif not calc_num1_display and '.' not in calc_num2:
         calc_num2 = calc_num2 + '.'
         num_display.config(text=calc_num2)
     erase_button.config(text='C')
@@ -85,9 +103,12 @@ def press_equals():
     global calc_num2
     global math_op
     global equals_prior
+    global calc_num1_display
+
     if calc_num1 != '' and calc_num2 != '' and math_op != '':
         calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
         num_display.config(text=calc_num1)
+        calc_num1_display = True
     equals_prior = True
     divide_button.config(fg='white', bg='#FF9912', state=NORMAL)
     multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
@@ -100,8 +121,11 @@ def press_erase():
     global calc_num2
     global math_op
     global equals_prior
+    global op_order
+    global calc_num1_display
+
     if erase_button['text'] == 'C':
-        if num_display['text'] == calc_num1:
+        if calc_num1_display :
             calc_num1 = '0'
             num_display.config(text=calc_num1)
         else:
@@ -114,6 +138,8 @@ def press_erase():
         math_op = ''
         equals_prior = False
         num_display.config(text=calc_num1)
+        calc_num1_display = True
+        op_order = False
         divide_button.config(fg='white', bg='#FF9912', state=NORMAL)
         multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
         minus_button.config(fg='white', bg='#FF9912', state=NORMAL)
@@ -124,6 +150,7 @@ def press_neg():
     global calc_num1
     global calc_num2
     global math_op
+
     if num_display['text'] == calc_num1:
         if calc_num1[0] != '-':
             calc_num1 = '-' + calc_num1
@@ -151,7 +178,7 @@ root.minsize(215, 389)
 root.maxsize(215, 389)
 top_frame = Frame(root, )
 top_frame.grid(row=0, columnspan=4)
-num_display = Label(top_frame, bg='black', fg='white', text=calc_num1, font=10)
+num_display = Label(top_frame, bg='black', fg='white', text= calc_num1, font=10)
 num_display.pack()
 erase_button = Button(root, text='AC', fg='black', bg='#F5F5DC', height=4, width=6, bd='3', command=press_erase)
 erase_button.grid(row=1, column=0)
