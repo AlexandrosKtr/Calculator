@@ -67,48 +67,6 @@ def toggle_button():
         plus_button.config(fg='white', bg='#FF9912', state=NORMAL)
 
 
-def press_divide():
-    global calc_num1
-    global calc_num2
-    global math_op
-    global equals_prior
-    if math_op != '' and calc_num2 != '' and not equals_prior:
-        calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
-        num_display.config(text=calc_num1)
-    calc_num2 = ''
-    math_op = '/'
-    equals_prior = False
-    toggle_button()
-
-
-def press_multiply():
-    global calc_num1
-    global calc_num2
-    global math_op
-    global equals_prior
-    if math_op != '' and calc_num2 != '' and not equals_prior:
-        calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
-        num_display.config(text=calc_num1)
-    calc_num2 = ''
-    math_op = '*'
-    equals_prior = False
-    toggle_button()
-
-
-def press_minus():
-    global calc_num1
-    global calc_num2
-    global math_op
-    global equals_prior
-    if math_op != '' and calc_num2 != '' and not equals_prior:
-        calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
-        num_display.config(text=calc_num1)
-    calc_num2 = ''
-    math_op = '-'
-    equals_prior = False
-    toggle_button()
-
-
 def press_comma():
     global calc_num1
     global calc_num2
@@ -135,20 +93,6 @@ def press_equals():
     multiply_button.config(fg='white', bg='#FF9912', state=NORMAL)
     minus_button.config(fg='white', bg='#FF9912', state=NORMAL)
     plus_button.config(fg='white', bg='#FF9912', state=NORMAL)
-
-
-def press_plus():
-    global calc_num1
-    global calc_num2
-    global math_op
-    global equals_prior
-    if math_op != '' and calc_num2 != '' and not equals_prior:
-        calc_num1 = str(eval(calc_num1 + math_op + calc_num2))
-        num_display.config(text=calc_num1)
-    calc_num2 = ''
-    math_op = '+'
-    equals_prior = False
-    toggle_button()
 
 
 def press_erase():
