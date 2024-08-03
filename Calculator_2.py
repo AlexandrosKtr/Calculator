@@ -118,10 +118,9 @@ class Calculator:
             else:
                 text, row, col, command, bg, colspan = button
 
-            btn = tk.Button(self.root, text=lambda t = text: t, width=5, height=2, font=button_font, bg=bg, fg=button_fg, activebackground=button_active_bg if bg != operator_bg else operator_active_bg, command=lambda t=text: command(t) if text.isdigit() or text == "." else command)
+            btn = tk.Button(self.root, text=text, width=5, height=2, font=button_font, bg=bg, fg=button_fg, activebackground=button_active_bg if bg != operator_bg else operator_active_bg, command=lambda t=text: command(t) if text.isdigit() or text == "." else lambda: command())
             btn.grid(row=row, column=col, columnspan=colspan, padx=5, pady=5, sticky="nsew")
-            if colspan == 2:
-                btn.grid(columnspan=2)
+            
 
         # Make the buttons expand when the window is resized
         for i in range(6):
