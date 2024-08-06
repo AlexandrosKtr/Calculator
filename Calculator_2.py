@@ -10,12 +10,12 @@ class Calculator:
         self.operator = ""
 
         # NEW
-        # self.temp = ""
+        self.temp = ""
         #
 
         # OLD
-        self.num1 = ""
-        self.num2 = ""
+        # self.num1 = ""
+        # self.num2 = ""
         #
 
         self.new = True
@@ -48,40 +48,40 @@ class Calculator:
         # If num is the first num after running the app or if after an operation, delete existing entry and insert num.
 
         # NEW
-        # if not self.operator:
-        #     if self.new:
-        #         self.entry.delete(0, tk.END)
-        #         self.entry.insert(tk.END, str(num))
-        #         self.new = False
-        #     else:
-        #         self.entry.insert(tk.END, str(num))
-        # else:
-        #     if self.new:
-        #         self.temp = self.entry.get()
-        #         self.entry.delete(0, tk.END)
-        #         self.entry.insert(tk.END, str(num))
-        #         self.new = False
-        #     else:
-        #         self.entry.insert(tk.END, str(num))
+        if not self.operator:
+            if self.new:
+                self.entry.delete(0, tk.END)
+                self.entry.insert(tk.END, str(num))
+                self.new = False
+            else:
+                self.entry.insert(tk.END, str(num))
+        else:
+            if self.new:
+                self.temp = self.entry.get()
+                self.entry.delete(0, tk.END)
+                self.entry.insert(tk.END, str(num))
+                self.new = False
+            else:
+                self.entry.insert(tk.END, str(num))
         #
 
         # OLD
-        if not self.operator:
-            if self.new:
-                self.num1 = num
-                self.new = False
-            else:
-                self.num1 = self.num1 + num
-            self.entry.delete(0, tk.END)
-            self.entry.insert(tk.END, str(self.num1))
-        else:
-            if self.new:
-                self.num2 = num
-                self.new = False
-            else:
-                self.num2 = self.num2 + num
-            self.entry.delete(0, tk.END)
-            self.entry.insert(tk.END, str(self.num2))
+        # if not self.operator:
+        #     if self.new:
+        #         self.num1 = num
+        #         self.new = False
+        #     else:
+        #         self.num1 = self.num1 + num
+        #     self.entry.delete(0, tk.END)
+        #     self.entry.insert(tk.END, str(self.num1))
+        # else:
+        #     if self.new:
+        #         self.num2 = num
+        #         self.new = False
+        #     else:
+        #         self.num2 = self.num2 + num
+        #     self.entry.delete(0, tk.END)
+        #     self.entry.insert(tk.END, str(self.num2))
         #
         
         self.btn_clear.configure(text="C")
@@ -93,6 +93,7 @@ class Calculator:
         
         self.new = True
         self.entry.delete(0, tk.END)
+        self.entry.insert(tk.END, "0")
         self.btn_clear.configure(text="AC")
 
 
@@ -101,17 +102,17 @@ class Calculator:
         self.operator = ""
 
         # NEW
-        # self.temp = ""
+        self.temp = ""
         #
 
         # OLD
-        self.num1 = ""
-        self.num2 = ""
+        # self.num1 = ""
+        # self.num2 = ""
         #
 
         self.toggle()
         self.entry.delete(0, tk.END)
-        self.entry.insert(0, "0")
+        self.entry.insert(tk.END, "0")
         self.new = True
 
 
@@ -121,49 +122,82 @@ class Calculator:
         self.toggle()
 
         # NEW
-        # if self.operator:
-        #     curr = self.temp + self.operator + self.entry.get()
-        #     self.temp = self.operator + self.entry.get()
-        # else:
-        #     curr = self.entry.get() + self.temp
+        if self.operator:
+            curr = self.temp + self.operator + self.entry.get()
+            self.temp = self.operator + self.entry.get()
+        else:
+            curr = self.entry.get() + self.temp
         
+        try:
+            result = str(eval(curr))
+            if float(result) % 1 == 0:
+                result = str(int(float(result)))
+
+            self.entry.delete(0, tk.END)
+            self.entry.insert(tk.END, result)
+
+        except ZeroDivisionError as ex:
+            self.entry.delete(0, tk.END)
+            self.entry.insert(tk.END, "Error")
+            messagebox.showerror("ZeroDivisionError", "Cannot divide by 0")
+
+        except Exception as ex:
+            self.entry.delete(0, tk.END)
+            self.entry.insert(tk.END, "Error")
+            messagebox.showerror("Error", "Invalid Input")
+        #
+
+        # OLD
+        # self.num1 = self.num1 + self.operator + self.num2
         # try:
-        #     result = str(eval(curr))  
+        #     result = str(eval(self.num1))
         # except Exception as ex:
         #     messagebox.showerror("Error", "Invalid Input")
         #
 
-        # OLD
-        self.num1 = self.num1 + self.operator + self.num2
-        try:
-            result = str(eval(self.num1))
-        except Exception as ex:
-            messagebox.showerror("Error", "Invalid Input")
-
-        if float(result) % 1 == 0:
-            result = str(int(float(result)))
-
-        self.entry.delete(0, tk.END)
-        self.entry.insert(tk.END, result)
         self.operator = ""
         self.new = True
-        #
+        
 
 
     def button_operator(self, operator):
         """Adds the operator"""
 
-        self.operator = operator
         self.toggle(operator)
+
+        if self.operator:
+            curr = self.temp + self.operator + self.entry.get()
+            self.temp = self.operator + self.entry.get()
+        
+            try:
+                result = str(eval(curr))
+                if float(result) % 1 == 0:
+                    result = str(int(float(result)))
+
+                self.entry.delete(0, tk.END)
+                self.entry.insert(tk.END, result)
+
+            except ZeroDivisionError as ex:
+                self.entry.delete(0, tk.END)
+                self.entry.insert(tk.END, "Error")
+                messagebox.showerror("ZeroDivisionError", "Cannot divide by 0")
+
+            except Exception as ex:
+                self.entry.delete(0, tk.END)
+                self.entry.insert(tk.END, "Error")
+                messagebox.showerror("Error", "Invalid Input")
+
+        self.operator = operator
+        
         self.new = True
 
         # OLD
-        curr = self.entry.get()
-        if curr[-1] in ["+", "-", "*", "/"]:
-            self.entry.delete(len(curr) - 1)
-            self.entry.insert(tk.END, operator)
-        else:
-            self.entry.insert(tk.END, operator)
+        # curr = self.entry.get()
+        # if curr[-1] in ["+", "-", "*", "/"]:
+        #     self.entry.delete(len(curr) - 1)
+        #     self.entry.insert(tk.END, operator)
+        # else:
+        #     self.entry.insert(tk.END, operator)
         #
 
     
@@ -171,29 +205,29 @@ class Calculator:
         """Displays the current number in a percentage type"""
 
         # NEW
-        # try:
-        #     curr = str(float(self.entry.get()) / 100)
-        # except ValueError:
-        #     messagebox.showerror("Error", "Invalid Input")
-        # self.entry.delete(0, tk.END)
-        # self.entry.insert(tk.END, curr)
+        try:
+            curr = str(float(self.entry.get()) / 100)
+        except ValueError:
+            messagebox.showerror("Error", "Invalid Input")
+        self.entry.delete(0, tk.END)
+        self.entry.insert(tk.END, curr)
         #
 
         # OLD
-        if not self.operator:
-            try:
-                self.num1 = str(float(self.num1) /100)
-            except ValueError:
-                messagebox.showerror("Error", "Invalid Input")
-            self.entry.delete(0, tk.END)
-            self.entry.insert(tk.END, self.num1)
-        else:
-            try:
-                self.num2 = str(float(self.num2) / 100)
-            except ValueError:
-                messagebox.showerror("Error", "Invalid Input")
-            self.entry.delete(0, tk.END)
-            self.entry.insert(tk.END, self.num2)
+        # if not self.operator:
+        #     try:
+        #         self.num1 = str(float(self.num1) /100)
+        #     except ValueError:
+        #         messagebox.showerror("Error", "Invalid Input")
+        #     self.entry.delete(0, tk.END)
+        #     self.entry.insert(tk.END, self.num1)
+        # else:
+        #     try:
+        #         self.num2 = str(float(self.num2) / 100)
+        #     except ValueError:
+        #         messagebox.showerror("Error", "Invalid Input")
+        #     self.entry.delete(0, tk.END)
+        #     self.entry.insert(tk.END, self.num2)
         #
 
         
