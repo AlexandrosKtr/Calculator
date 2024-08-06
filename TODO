@@ -1,10 +1,1 @@
-Number buttons:
-1. At the start and after an operation if you press a number, the previous one disapears. (CHECK)
-2. After an operator is pressed, pressing a number only shows the new number.
-Operator buttons:
-1. Pressing an operator button, highlights it, and it is not shown on the entry
-2. If there is already an operator present, pressing another operator changes the current operator to the last one. (CHECK)
-Equals button:
-1. Pressing the equal button shows the result of the operation. Pressing it more than once repeats the operation to the result of each operation.
-Comma button:
-1. If there is already a comma in the shown number, you cannot have another one. (CHECK)
+Add Advanced functionality
