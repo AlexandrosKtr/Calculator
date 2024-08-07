@@ -43,7 +43,9 @@ class Calculator:
     def button_num(self, num):
         """Adds the specified number to the operation"""
 
-        # If num is the first num after running the app or if after an operation, delete existing entry and insert num.
+        if self.entry.get() == "0" and num == "0":
+            return
+
         if not self.operator:
 
             if self.new:
@@ -66,6 +68,17 @@ class Calculator:
                 self.entry.insert(tk.END, str(num))
 
         self.btn_clear.configure(text="C")
+
+
+    def button_comma(self):
+        """Adds a comma"""
+
+        curr = self.entry.get()
+
+        if "." not in curr:
+            self.entry.insert(tk.END, ".")
+            self.new = False
+
 
     def button_clear(self):
         """Clears the displayed number"""
@@ -125,7 +138,7 @@ class Calculator:
 
         self.toggle(operator)
 
-        if self.operator:
+        if self.operator and self.operator != operator:
             curr = self.temp + self.operator + self.entry.get()
             self.temp = self.operator + self.entry.get()
 
@@ -232,7 +245,7 @@ class Calculator:
             ("2", 4, 1, self.button_num, button_bg),
             ("3", 4, 2, self.button_num, button_bg),
             ("0", 5, 0, self.button_num, button_bg, 2),
-            (".", 5, 2, self.button_num, button_bg),
+            (".", 5, 2, self.button_comma, button_bg),
             ("=", 5, 3, self.button_equal, operator_bg),
         ]
 
@@ -257,7 +270,7 @@ class Calculator:
                     top_button_fg if text in ["C", "+/-", "%"] else button_fg
                 ),
                 command=lambda text=text, command=command: (
-                    command(text) if text.isdigit() or text == "." else command()
+                    command(text) if text.isdigit() else command()
                 ),
             )
             btn.grid(
@@ -350,7 +363,7 @@ class Calculator:
 
 
 def main():
-    calculator = Calculator()
+    Calculator()
 
 
 if __name__ == "__main__":
