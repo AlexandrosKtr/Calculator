@@ -1,5 +1,4 @@
 from Calculator_2_testable import *
-import pytest
 
 
 def main():
