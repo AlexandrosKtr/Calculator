@@ -1,4 +1,4 @@
-from Calculator_2_testable import *
+from Calculator import *
 
 
 def main():
