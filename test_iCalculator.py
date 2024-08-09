@@ -1,4 +1,4 @@
-from Calculator import *
+from iCalculator import *
 
 
 def main():
